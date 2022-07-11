@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "license": "MIT",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",
     "start": "node dist/server",
@@ -21,8 +22,7 @@
     "express-graphql": "0.12.0",
     "apollo-server": "3.9.0",
     "graphql": "^15.3.0",
-    "graphql-scalars": "1.17.0",
-    "nexus": "1.3.0"
+    "nexus": "1.2.0"
   },
   "devDependencies": {
     "@types/node": "16.11.43",

@@ -1,18 +1,5 @@
-import {
-  intArg,
-  makeSchema,
-  nonNull,
-  objectType,
-  stringArg,
-  inputObjectType,
-  arg,
-  asNexusMethod,
-  enumType,
-} from 'nexus'
-import { DateTimeResolver } from 'graphql-scalars'
+import { makeSchema, objectType, enumType } from 'nexus'
 import { Context } from './context'
-
-export const DateTime = asNexusMethod(DateTimeResolver, 'date')
 
 const Query = objectType({
   name: 'Query',
@@ -21,30 +8,6 @@ const Query = objectType({
       type: 'User',
       resolve: (_parent, _args, context: Context) => {
         return context.prisma.user.findMany()
-      },
-    })
-  },
-})
-
-const Mutation = objectType({
-  name: 'Mutation',
-  definition(t) {
-    t.nonNull.field('signupUser', {
-      type: 'User',
-      args: {
-        data: nonNull(
-          arg({
-            type: 'UserCreateInput',
-          }),
-        ),
-      },
-      resolve: (_, args, context: Context) => {
-        return context.prisma.user.create({
-          data: {
-            name: args.data.name,
-            email: args.data.email,
-          },
-        })
       },
     })
   },
@@ -64,32 +27,8 @@ const SortOrder = enumType({
   members: ['asc', 'desc'],
 })
 
-const UserUniqueInput = inputObjectType({
-  name: 'UserUniqueInput',
-  definition(t) {
-    t.int('id')
-    t.string('email')
-  },
-})
-
-const UserCreateInput = inputObjectType({
-  name: 'UserCreateInput',
-  definition(t) {
-    t.nonNull.string('email')
-    t.string('name')
-  },
-})
-
 export const schema = makeSchema({
-  types: [
-    Query,
-    Mutation,
-    User,
-    UserUniqueInput,
-    UserCreateInput,
-    SortOrder,
-    DateTime,
-  ],
+  types: [Query, User, SortOrder],
   outputs: {
     schema: __dirname + '/../schema.graphql',
     typegen: __dirname + '/generated/nexus.ts',
